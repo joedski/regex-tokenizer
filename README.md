@@ -153,3 +153,58 @@ function onFlush() {
 	console.log( 'And it is done.' );
 }
 ```
+
+
+
+### A Full Example
+
+The rules in this example are meant to break a string into a series of words (with punctuation), also separating parentheses for grouping purposes, and to separate words with pendants for use as variables, functions, and so on.
+
+These rules include a catch-all rule that is intended to catch any series of tokens not already captured.
+
+```javascript
+var Tokenizer = require( './lib/tokenizer' );
+
+// The \n at the end is not required. :P
+var input = "foo bar baz\nbing (boop?) bop!\nAn escaped \\@token!\n$shazam = bleep!\nlet's try something with $var's punctuation.\n";
+
+var rules = [
+	[ (/^\r?\n/), 'lineEnd' ],
+	[ (/^\s+/), 'whitespace' ],
+	[ (/^\(/), 'groupBegin' ],
+	[ (/^\)/), 'groupEnd' ],
+	[ (/^\\[\$#@]/), 'escapedPendant' ],
+	[ (/^\$[a-z0-9-_]+/), 'variable' ],
+	[ (/^@[a-z0-9-_]+/), 'function' ],
+	[ (/^#[a-z0-9-_]+/), 'metadata' ],
+	[ (/^=/), 'assign' ],
+	// Be careful making the catch all:
+	// It has to not cover any of the previous specific tokens.
+	// \r\n isn't in there because that's covered by \s.
+	[ (/^[^\s\(\)\\\$#@=]+/), 'text' ],
+];
+
+function onToken( token ) {
+	console.log( '>', token.type, valueIfNotLineEnd() );
+
+	function valueIfNotLineEnd() {
+		if( token.type != 'lineEnd' ) {
+			return '= "' + token.value + '"';
+		}
+		else {
+			return '';
+		}
+	}
+}
+
+function onFlush() {
+	console.log( 'done!' );
+}
+
+var tok = new Tokenizer({ rules: rules, onToken: onToken, onFlush: onFlush });
+
+tok.tokenize( input, true );
+// or:
+// tok.tokenize( input );
+// tok.flush();
+```
