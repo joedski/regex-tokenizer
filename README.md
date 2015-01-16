@@ -30,7 +30,7 @@ Tokenizer( options )
 Creates a new Tokenizer.
 
 - `options`: Plain Object; An object with the following properties:
-	- `rules`: Array; An array of rules, each rule itself specified as an array of 2 or 3 elements.  See *addRule()* below.
+	- `rules`: Array; An array of rules, each rule itself specified as an array of 2 or 3 elements.  See *Tokenizer#addRule* below.
 		- Default: `[]`
 	- `onToken`: Function( `token` ); A function that gets called every time a token is sliced off the input stream.
 		- Default: `function(){}`
@@ -45,7 +45,7 @@ Creates a new Tokenizer.
 ### Tokenizer#tokenize
 
 ```
-Tokenizer#tokenize( stringChunk, noBuffer = false )
+tokenizerInstance.tokenize( stringChunk, noBuffer = false )
 ```
 
 Tokenizes a chunk of input, optionally treating it as the last or entire portion of the input.
@@ -59,7 +59,7 @@ Tokenizes a chunk of input, optionally treating it as the last or entire portion
 ### Tokenizer#flush
 
 ```
-Tokenizer#flush()
+tokenizerInstance.flush()
 ```
 
 Flushes the input, tokenizing any remaining input then calling `onFlush()`.  Takes no arguments.
@@ -69,7 +69,7 @@ Flushes the input, tokenizing any remaining input then calling `onFlush()`.  Tak
 ### Tokenizer#addRules
 
 ```
-Tokenizer#addRules( rules )
+tokenizerInstance.addRules( rules )
 ```
 
 Adds a list of rules to the Tokenizer instance.
@@ -82,7 +82,7 @@ Adds a list of rules to the Tokenizer instance.
 ### Tokenizer#addRule
 
 ```
-Tokenizer#addRule( ruleTest, tokenType, ignored = false )
+tokenizerInstance.addRule( ruleTest, tokenType, ignored = false )
 ```
 
 Adds a single rule to this instance.
